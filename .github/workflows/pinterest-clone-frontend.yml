@@ -21,4 +21,7 @@ jobs:
 
       - name: Make Heroku Release
         run: |
+          docker login --username=_ --password=$HEROKU_API_KEY registry.heroku.com
           heroku container:release web --app pinterest-clone-frontend
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}

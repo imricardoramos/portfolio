@@ -27,6 +27,7 @@ export default function Home() {
   ]).flat())
 
   useEffect( async () => {
+    console.log(axios.defaults)
     const response = await axios.get("/pin/")
     setPinsData(response.data)
   }, [])
