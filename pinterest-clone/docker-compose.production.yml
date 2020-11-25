@@ -2,19 +2,14 @@ version: "3.5"
 services:
   pinterest_backend:
     build: ./backend
-    image: pinterest_backend
-    env_file: .envs/.local/.django
+    image: pinterest_backend_production
+    env_file: .envs/.production/.django
     restart: always
-    volumes:
-      - ./backend:/backend
 
   pinterest_frontend:
-    image: node:14-alpine 
-    env_file: .envs/.local/.next
-    volumes:
-      - ./frontend:/frontend
-    working_dir: /frontend
-    command: npm run dev
+    build: ./frontend
+    image: pinterest_frontend_production
+    env_file: .envs/.production/.next
 
   caddy:
     image: caddy

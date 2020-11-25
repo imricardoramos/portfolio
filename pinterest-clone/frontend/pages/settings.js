@@ -7,11 +7,11 @@ import { useAuth } from '~/providers/Auth'
 import ProfilePictureInput from '~/components/ProfilePictureInput'
 import Cookies from 'js-cookie'
 export default function Settings(props){
-  let { loggedUserData } = useAuth()
+  let { loggedUserData, setLoggedUserData } = useAuth()
   let [name, setName] = useState(loggedUserData.name)
   let [avatar, setAvatar] = useState()
 
-  function updateProfile(e){
+  async function updateProfile(e){
     e.preventDefault()
     let formData = new FormData()
     formData.append("name", name)
@@ -19,11 +19,13 @@ export default function Settings(props){
       formData.append("avatar", avatar)
     }
     try {
-      axios.patch(`/user/${loggedUserData.username}/`, formData, {
+      const response = await axios.patch(`/user/${loggedUserData.username}/`, formData, {
         headers: {
           "X-CSRFToken": Cookies.get("csrftoken")
         }
       })
+      setLoggedUserData(response.data)
+
     } catch(e){
       console.log(e)
     }

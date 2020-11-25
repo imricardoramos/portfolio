@@ -13,19 +13,31 @@ import FollowButton from '~/components/FollowButton'
 import { useAuth } from '~/providers/Auth'
 import Feed from '~/components/Feed'
 import BoardsFeed from '~/components/BoardsFeed'
+import InfiniteScroll from 'react-infinite-scroll-component'
 
 export default function UserProfile(props){
   let [addMenuVisibility, setAddMenuVisibility] = useState("hidden")
   let [userData, setUserData] = useState({})
+  let [boardsData, setBoardsData] = useState([])
   let { loggedUserData } = useAuth()
   let router = useRouter()
 
   useEffect( async () => {
-    if(router.query.username){
-      const response = await axios.get(`/user/${router.query.username}/`)
-      setUserData(response.data)
+    if(router.query.username && loggedUserData.username){
+      try{
+        const response = await axios.get(`/user/${router.query.username}/`)
+        setUserData(response.data)
+
+        if(router.query.username == loggedUserData.username){
+          const response2 = await axios.get(`/board/?author__username=${router.query.username}&ordering=-created_at`)
+          setBoardsData(response2.data.results)
+        }
+      }
+      catch(e){
+        console.log(e)
+      }
     }
-  }, [router.query.username])
+  }, [router.query.username, loggedUserData.username])
 
   function AddWidget(props){
     let [createBoardModalVisibility, setCreateBoardModalVisibility] = useState("hidden")
@@ -67,19 +79,23 @@ export default function UserProfile(props){
         <h1 className="text-3xl font-bold">{userData.name}</h1>
         <div>@{userData.username}</div>
         <div>{userData.total_followers} followers · {userData.total_following} following</div>
-        { userData.id != loggedUserData.id &&
-        <div className="mt-5"><FollowButton user={userData} /></div>
+        { userData.username != loggedUserData.username &&
+          <div className="mt-5"><FollowButton user={userData} /></div>
         }
       </div>
       <div className="container mx-auto mt-10">
-        { (userData.username == loggedUserData.username) ? (
-        <>
-          <AddWidget />
-          <BoardsFeed boards={userData.boards} />
-        </>
-        ) : (
-          <Feed pins={userData.pins} />
-        ) }
+        { userData.username && loggedUserData.username && (
+          <>
+          { (userData.username == loggedUserData.username) ? (
+            <>
+              <AddWidget />
+              <BoardsFeed boards={boardsData} />
+            </>
+            ) : (
+              <Feed filters={`author__username=${router.query.username}&ordering=-created_at`} />
+          ) }
+          </>
+        )}
       </div>
     </MainLayout>
   )

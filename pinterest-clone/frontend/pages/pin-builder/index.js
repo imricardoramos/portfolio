@@ -7,9 +7,9 @@ import { faArrowCircleUp, faEllipsisH } from '@fortawesome/free-solid-svg-icons'
 import RoundedButton from '~/components/RoundedButton'
 import BoardSelector from '~/components/BoardSelector'
 import Cookies from 'js-cookie'
+import { useRouter } from 'next/router'
 
 export default function PinBuilder(props){
-  let [boardsData, setBoardsData] = useState([])
   let [selectedBoard, setSelectedBoard] = useState({})
   let [title, setTitle] = useState('')
   let [description, setDescription] = useState('')
@@ -17,13 +17,7 @@ export default function PinBuilder(props){
   let [image, setImage] = useState('')
   let [imageURL, setImageURL] = useState('')
   let fileInputRef = useRef()
-
-  useEffect(fetchBoards, [])
-
-  async function fetchBoards(){
-    const response = await axios.get("/board/")
-    setBoardsData(response.data)
-  }
+  let router = useRouter()
 
   async function handleSubmit(e){
     e.preventDefault()
@@ -46,6 +40,7 @@ export default function PinBuilder(props){
         "X-CSRFToken": Cookies.get("csrftoken"),
       }
     })
+    router.push(`/pin/${pin.id}`)
   }
 
   function previewImage(e){
@@ -62,7 +57,7 @@ export default function PinBuilder(props){
               <div className="p-10">
                 <div className="flex items-center justify-between">
                   <RoundedButton><FontAwesomeIcon icon={faEllipsisH} /></RoundedButton>
-                  <BoardSelector data={boardsData} onSelect={board => setSelectedBoard(board)}/>
+                  <BoardSelector create onChange={board => setSelectedBoard(board)}/>
                 </div>
                 <div className="flex">
                   <div className="flex flex-col w-1/2">

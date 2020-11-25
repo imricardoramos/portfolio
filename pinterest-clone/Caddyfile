@@ -1,5 +1,5 @@
 pinterest-clone.portfolio.ricardoramos.localhost {
-  handle /api/media/* {
+  handle /api/storage/* {
     reverse_proxy pinterest_backend:8000
   }
   handle /api/* {

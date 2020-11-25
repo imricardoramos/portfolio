@@ -18,7 +18,7 @@ class Command(BaseCommand):
         users = []
         for index, profile_pics_filepath in enumerate(profile_pics_filepaths):
             with open(profile_pics_filepath, "rb") as f:
-                image = File(f, name=f"pinterest_clone/profile_pics/{profile_pics_filepath.name}")
+                image = File(f, name=f"{profile_pics_filepath.name}")
                 user = User.objects.create(name=f"User {index}", username=f"user_{index}", email=f"user{index}@example.com", avatar=image)
             user.set_password("12345")
             user.save()
@@ -43,7 +43,7 @@ class Command(BaseCommand):
 
             for index, furniture_filename in enumerate(furniture_filenames):
                 with open(furniture_filename, "rb") as f:
-                    image = File(f, name=f"pinterest_clone/{furniture_filename.name}")
+                    image = File(f, name=f"{furniture_filename.name}")
                     pin = Pin.objects.create(title=f"Furniture {index}",
                                        description=f"Description {index}",
                                        link=f"https://link{index}.com",
@@ -55,7 +55,7 @@ class Command(BaseCommand):
 
             for index, people_filename in enumerate(people_filenames):
                 with open(people_filename, "rb") as f:
-                    image = File(f, name=f"pinterest_clone/{people_filename.name}")
+                    image = File(f, name=f"{people_filename.name}")
                     pin = Pin.objects.create(title=f"People {index}",
                                        description=f"Description {index}",
                                        link=f"https://link{index}.com",
@@ -67,7 +67,7 @@ class Command(BaseCommand):
 
             for index, places_filename in enumerate(places_filenames):
                 with open(places_filename, "rb") as f:
-                    image = File(f, name=f"pinterest_clone/{places_filename.name}")
+                    image = File(f, name=f"{places_filename.name}")
                     pin = Pin.objects.create(title=f"Places {index}",
                                        description=f"Description {index}",
                                        link=f"https://link{index}.com",

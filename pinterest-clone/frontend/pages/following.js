@@ -6,12 +6,7 @@ import Feed from '~/components/Feed'
 import PrimaryButton from '~/components/PrimaryButton'
 import StackedAvatars from '~/components/StackedAvatars'
 export default function Following() {
-  let [pinsData, setPinsData] = useState([])
   let { loggedUserData } = useAuth()
-  useEffect(async () => {
-    const response = await axios.get("/pin/following/")
-    setPinsData(response.data)
-  }, [])
 
   return (
     <MainLayout>
@@ -20,7 +15,9 @@ export default function Following() {
         <StackedAvatars users={loggedUserData.following} />
         <PrimaryButton className="block ml-auto">Find people to follow</PrimaryButton>
       </div>
-      <Feed pins={pinsData} includeFooter />
+      { loggedUserData.username &&
+        <Feed filters={`author__followers__username=${loggedUserData.username}`} includeFooter />
+      }
     </MainLayout>
   )
 }

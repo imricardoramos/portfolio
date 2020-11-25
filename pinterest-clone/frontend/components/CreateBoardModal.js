@@ -3,19 +3,25 @@ import Modal from './Modal'
 import PrimaryButton from './PrimaryButton'
 import axios from 'axios'
 import Cookies from 'js-cookie'
+import Router from 'next/router'
 
 export default function CreateBoardModal(props){
   let [boardName, setBoardName] = useState("")
   async function createBoardSubmitHandler(e){
     e.preventDefault()
-    const response = await axios.post("/board/", {
-      name: boardName
-    }, {
-      headers: {
-        "X-CSRFToken": Cookies.get("csrftoken")
-      }
-    })
-    let data = response.data
+    try {
+      await axios.post("/board/", {
+        name: boardName
+      }, {
+        headers: {
+          "X-CSRFToken": Cookies.get("csrftoken")
+        }
+      })
+      Router.reload()
+    }
+    catch(e){
+      console.log(e)
+    }
   }
   return (
     <Modal className={props.className} onClickOutside={props.onClickOutside}>

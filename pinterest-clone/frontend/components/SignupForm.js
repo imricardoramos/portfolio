@@ -1,20 +1,28 @@
 import { useState } from 'react'
+import { useAuth } from '~/providers/Auth'
 import Modal from './Modal'
 import PrimaryButton from './PrimaryButton'
+import axios from 'axios'
 
 export default function SignupForm(props){
   let [username, setUsername] = useState("")
-  let [email, setEmaul] = useState("")
+  let [email, setEmail] = useState("")
   let [password, setPassword] = useState("")
+  let { setAuthenticated } = useAuth()
 
-  function signupUser(e){
+  async function signupUser(e){
     e.preventDefault()
-    axios.post("/rest-auth/login/", {
-      username: username,
-      email: email,
-      password1, password,
-      password2, password,
-    })
+    try{
+      await axios.post("/rest-auth/registration/", {
+        username: username,
+        email: email,
+        password1: password,
+        password2: password,
+      })
+      setAuthenticated(true)
+    }
+    catch(e){
+    }
   }
   return (
     <Modal className={props.className} onClickOutside={props.onClickOutside}>

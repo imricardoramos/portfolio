@@ -20,7 +20,7 @@ class UserSerializer(ModelSerializer):
         request = self.context.get("request")
         if request and hasattr(request, "user"):
             user = request.user
-            if obj.followers.filter(following=user.id).exists():
+            if obj.followers.filter(id=user.id).exists():
                 return True
 
         return False

@@ -13,20 +13,26 @@ import { faShare, faEllipsisH } from '@fortawesome/free-solid-svg-icons'
 import RoundedButton from '~/components/RoundedButton';
 import BoardSelector from '../../components/BoardSelector';
 import UserSignature from '~/components/UserSignature';
+import { useAuth } from '~/providers/Auth'
 
 export default function Home() {
   let [pinData, setPinData] = useState({})
-  let [suggestedPinsData, setSuggestedPinsData] = useState([])
+  let [boardTarget, setBoardTarget] = useState({})
+  let [pinSaved, setPinSaved] = useState(false)
   let router = useRouter()
+  let { loggedUserData } = useAuth()
 
   useEffect( async () => {
     if(router.query.id){
       const response = await axios.get(`/pin/${router.query.id}/`)
       setPinData(response.data)
-      const response2 = await axios.get(`/pin/`)
-      setSuggestedPinsData(response2.data)
     }
   }, [router.query])
+
+  function onSave(board){
+    setBoardTarget(board)
+    setPinSaved(true)
+  }
 
   return (
     <MainLayout>
@@ -44,16 +50,26 @@ export default function Home() {
                   <RoundedButton><FontAwesomeIcon icon={faEllipsisH} /></RoundedButton>
                   <RoundedButton className="ml-2"><FontAwesomeIcon icon={faShare} /></RoundedButton>
                 </div>
-                <BoardSelector pin={pinData} />
+                { pinSaved ? (
+                  <div className="rounded-xl bg-gray-300 px-4 py-2">Saved to <b>{boardTarget.name}</b></div>
+                ) : (
+                  <BoardSelector pin={pinData} onSave={onSave}/>
+                )}
               </div>
               <div className="pr-5">
                 <h1 className="text-4xl font-bold">{pinData.title}</h1>
                 <p>{pinData.description}</p>
                 <div className="flex justify-between my-2">
                   { pinData.author &&
+                  <>
                     <UserSignature user={pinData.author} includeFollowers />
+                    {  pinData.author.username != loggedUserData.username &&
+                    <>
+                      <FollowButton user={pinData.author} />
+                    </>
+                    }
+                  </>
                   }
-                  <FollowButton user={pinData.author} />
                 </div>
                 <Tabs />
               </div>
@@ -61,7 +77,7 @@ export default function Home() {
           </div>
         </Card>
         <h2 className="font-bold text-center mt-10 text-xl">More like this</h2>
-        <Feed pins={suggestedPinsData} />
+        <Feed filters={`ordering=-created_at`} />
       </div>
     </MainLayout>
   )

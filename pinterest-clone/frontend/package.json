@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
-    "start": "next start -p ${PORT}"
+    "build": "NODE_ENV=production next build",
+    "start": "NODE_ENV=production next start -p ${PORT}"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.32",
@@ -16,10 +16,14 @@
     "next": "10.0.1",
     "react": "17.0.1",
     "react-dom": "17.0.1",
+    "react-infinite-scroll-component": "^5.1.0",
+    "react-infinite-scroll-hook": "^3.0.0",
     "react-masonry-css": "^1.0.14",
+    "react-masonry-infinite": "^1.2.2",
     "tailwindcss": "^1.9.6"
   },
   "devDependencies": {
+    "jest": "^26.6.3",
     "postcss-preset-env": "^6.7.0"
   }
 }

@@ -16,7 +16,7 @@ export default function UserBoard(props){
   return (
     <MainLayout>
       <h1 className="text-center text-3xl font-bold">{boardData.name}</h1>
-      <Feed pins={boardData.pins} />
+      <Feed filters={`boards=${router.query.board_id}&ordering=-created_at`} />
     </MainLayout>
   );
 }

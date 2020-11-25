@@ -5,14 +5,24 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import { useAuth } from '~/providers/Auth'
 import PrimaryButton from '~/components/PrimaryButton'
+import CreateBoardModal from '~/components/CreateBoardModal'
 import Cookies from 'js-cookie'
 
-export default function BoardSelector({pin, small, onSave}){
+export default function BoardSelector({pin, small, onChange, onSave, create}){
   let { loggedUserData } = useAuth()
   let [dropdownVisibility, setDropdownVisibility] = useState("hidden")
   let [selectedBoard, setSelectedBoard] = useState({})
+  let [boardCreationModalVisibility, setBoardCreationModalVisibility] = useState('hidden')
   let ref = useRef()
+
   useOnClickOutside(ref, () => setDropdownVisibility("hidden"))
+  useEffect( () => {
+    if(loggedUserData.boards && loggedUserData.boards.length > 0){
+      let board = loggedUserData.boards[0]
+      selectionHandler(board)
+    }
+  }, [loggedUserData])
+
   useEffect( () => {
     if(loggedUserData.boards && loggedUserData.boards.length > 0){
       setSelectedBoard(loggedUserData.boards[0])
@@ -22,21 +32,28 @@ export default function BoardSelector({pin, small, onSave}){
   function selectionHandler(board){
     setSelectedBoard(board);
     setDropdownVisibility("hidden")
+    if(onChange){
+      onChange(board)
+    }
   }
 
-  function savePin(){
-    const pin_id = pin.id
-    try{
-      axios.post(`/board/${selectedBoard.id}/add_pin/`, {
-        id: pin_id
-      }, {
-        headers: {
-          "X-CSRFToken": Cookies.get("csrftoken")
+  async function savePin(){
+    if(!create){
+      let pin_id = pin.id
+      try{
+        await axios.post(`/board/${selectedBoard.id}/add_pin/`, {
+          id: pin_id
+        }, {
+          headers: {
+            "X-CSRFToken": Cookies.get("csrftoken")
+          }
+        })
+        if(onSave){
+          onSave(selectedBoard)
         }
-      })
-      onSave()
-    } catch(e){
-      console.log(e)
+      } catch(e){
+        console.log(e)
+      }
     }
   }
 
@@ -76,5 +93,10 @@ export default function BoardSelector({pin, small, onSave}){
       )
     }
   }
-  return <PrimaryButton>Save</PrimaryButton>
+  return (
+    <div className="text-right">
+      <PrimaryButton onClick={() => setBoardCreationModalVisibility('block')}>Save</PrimaryButton>
+      <CreateBoardModal className={boardCreationModalVisibility} onClickOutside={() => setBoardCreationModalVisibility("hidden")} />
+    </div>
+  )
 }

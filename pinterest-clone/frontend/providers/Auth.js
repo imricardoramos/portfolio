@@ -3,6 +3,7 @@ import axios from 'axios'
 
 const AuthContext = createContext({
   loggedUserData: {},
+  setLoggedUserData: () => {},
   isAuthenticated: false,
   isLoading: true,
   setAuthenticated: () => {}
@@ -25,11 +26,12 @@ export function AuthProvider({children}){
       setLoading(false)
     }
     initializeAuth()
-  }, [])
+  }, [isAuthenticated])
   return (
     <AuthContext.Provider
       value={{
         loggedUserData,
+        setLoggedUserData,
         isAuthenticated,
         isLoading,
         setAuthenticated,

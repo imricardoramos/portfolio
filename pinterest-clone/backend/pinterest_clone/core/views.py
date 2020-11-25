@@ -5,10 +5,15 @@ from rest_framework.permissions import AllowAny
 from rest_framework.decorators import action
 from .models import Pin, Board
 from .serializers import PinSerializer, BoardSerializer
+from rest_framework.filters import OrderingFilter
+from django_filters.rest_framework import DjangoFilterBackend
 
 class PinViewSet(ModelViewSet):
     queryset = Pin.objects.all()
     serializer_class = PinSerializer
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    filterset_fields = ['author__username', 'author__followers__username', 'boards']
+    ordering_fields = ['created_at']
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
@@ -23,6 +28,8 @@ class PinViewSet(ModelViewSet):
 class BoardViewSet(ModelViewSet):
     queryset = Board.objects.all()
     serializer_class = BoardSerializer
+    filterset_fields = ['author__username']
+    ordering_fields = ['created_at']
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
@@ -37,8 +44,6 @@ class BoardViewSet(ModelViewSet):
 class CheckAuth(APIView):
     permission_classes = (AllowAny,)
     def get(self, request, *args, **kwargs):
-        print(request.headers)
-        print(request.META)
         if request.user.is_authenticated:
             return Response("true", 200)
         else:
