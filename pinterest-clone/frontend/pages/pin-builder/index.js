@@ -59,12 +59,12 @@ export default function PinBuilder(props){
                   <RoundedButton><FontAwesomeIcon icon={faEllipsisH} /></RoundedButton>
                   <BoardSelector create onChange={board => setSelectedBoard(board)}/>
                 </div>
-                <div className="flex">
-                  <div className="flex flex-col w-1/2">
+                <div className="flex flex-wrap mt-5">
+                  <div className="flex flex-col w-full sm:w-1/2">
                     { !imageURL &&
                     <div className="bg-gray-300 w-64 rounded-lg p-2 flex-grow w-full cursor-pointer" onClick={() => fileInputRef.current.click()}>
                       <div className="rounded-lg border-2 border-gray-400 border-dashed h-full relative">
-                        <div className="text-center mx-auto" style={{marginTop: "50%"}}>
+                        <div className="text-center mx-auto" style={{marginTop: "50%", minHeight: "15rem"}}>
                           <FontAwesomeIcon icon={faArrowCircleUp} />
                           <div className="my-2">Drag and drop or click to upload</div>
                         </div>
@@ -75,9 +75,8 @@ export default function PinBuilder(props){
                     { imageURL &&
                       <img src={imageURL} />
                     }
-                    <div className="h-10"></div>
                   </div>
-                  <div className="px-10 py-5 w-1/2" style={{minHeight: "510px"}}>
+                  <div className="sm:px-10 py-5 w-full sm:w-1/2" style={{minHeight: "510px"}}>
                       <input onChange={e => setTitle(e.target.value)} value={title} className="outline-none border-b focus:border-blue-500 focus:border-b-2 w-full py-2 text-3xl font-bold" placeholder="Add your title" />
                       <div className="font-bold">Ricardo Ramos</div>
                       <input onChange={e => setDescription(e.target.value)} value={description}  className="outline-none border-b focus:border-blue-500 focus:border-b-2 w-full py-2" placeholder="Tell everyone what your pin is about" />
