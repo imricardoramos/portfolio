@@ -11,4 +11,4 @@ So far there aren't that many, but the idea in most projects is to try to includ
 | Project | Description | Code | Live |
 | ------- | ----------- | ---- | ---- |
 | Pinterest Clone | A clone of the original [pinterest](https://pinterest.com) site | [Code](https://github.com/imricardoramos/pinterest-clone) | [Live](https://pinterest-clone.portfolio.ricardoramos.me) |
-| A Fake Artis goes to New York | An online version of the board game | [Code](https://github.com/imricardoramos/fake-artist) | [Live](https://fake-artist.ricardoramos.me) |
+| A Fake Artist goes to New York | An online version of the board game | [Code](https://github.com/imricardoramos/fake-artist) | [Live](https://fake-artist.ricardoramos.me) |
