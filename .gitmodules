@@ -1,3 +1,11 @@
 [submodule "pinterest_clone"]
   path = pinterest_clone
   url = https://github.com/imricardoramos/pinterest-clone.git
+
+[submodule "fake_artist"]
+	path = fake_artist
+	url = https://github.com/imricardoramos/fake-artist
+
+[submodule "reddit_clone"]
+	path = reddit_clone
+	url = https://github.com/imricardoramos/reddit-clone
