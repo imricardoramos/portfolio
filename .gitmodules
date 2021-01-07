@@ -1,0 +1,3 @@
+[submodule "pinterest_clone"]
+  path = pinterest_clone
+  url = https://github.com/imricardoramos/pinterest-clone.git
